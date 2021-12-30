@@ -23,7 +23,7 @@ const Container = styled.div`
 function App() {
   const [results, setResults] = useState([])
   const [therapist, setTherapists] = useState([] as string[])
-  const [filters, setFilters] = useState({durations: [] as string[], therapist:[] as string[]})
+  const [filters, setFilters] = useState({durations: [] as string[], therapists:[] as string[]})
   
   useEffect(() => {
     csv('./schedules.csv', (_, data:any) => {
@@ -57,10 +57,10 @@ function App() {
 
   const renderSessions = useMemo(() => {
     
-    if(filters.therapist.length === 0 || filters.durations.length === 0) return null
+    if(filters.therapists.length === 0 || filters.durations.length === 0) return null
     
-    const a = Object.keys(results).reduce((acc:FilterProps[], current:string) => {
-      if(filters.therapist.includes(current)) {
+    const sessions = Object.keys(results).reduce((acc:FilterProps[], current:string) => {
+      if(filters.therapists.includes(current)) {
         const time = results[current].filter((h:TherapistItemProps) => filters.durations.includes(h.session.toString()))
         acc = [...acc, {[current]:time.map((j:TherapistItemProps) => j.time).sort((a:string, b:string) => {
           return new Date(a).getTime() - new Date(b).getTime()
@@ -69,9 +69,9 @@ function App() {
       return acc
     }, [])
 
-    return a.map((v) => {
-      const therapist = Object.keys(v)[0]
-      const sessions = v[therapist]
+    return sessions.map((session) => {
+      const therapist = Object.keys(session)[0]
+      const sessions = session[therapist]
       return (
         <Sessions key={therapist} therapist={therapist} sessions={sessions} />
       )
@@ -82,7 +82,7 @@ function App() {
     <div className="App">
       {results && (
         <Container>
-          <DropdownList title="Therapist" id="Therapist" filters={filters['therapist']} list={ therapist } onSelect={onSelectTherapist}/>
+          <DropdownList title="Therapist" id="therapists" filters={filters['therapists']} list={ therapist } onSelect={onSelectTherapist}/>
           <DropdownList title="Duration" id="durations" filters={ filters['durations'] } list={ ['30', '60'] } onSelect={onSelectTherapist}/>
           {renderSessions}
         </Container>

@@ -16,7 +16,7 @@ const UL = styled.ul`
 `;
 
 const LI = styled.li`
-  padding: 12px 8px;
+  padding: 12px 18px;
   text-align:left;
   background-color: #EEE;
   margin-top:1px;
