@@ -1,8 +1,13 @@
 import styled from 'styled-components'
 
+export interface TherapistItemProps {
+  session: Date
+  time: string
+}
+
 interface SessionsProps {
   therapist: string
-  sessions: string[]
+  sessions: any[]
 }
 
 const Container = styled.div`
@@ -34,7 +39,9 @@ function Sessions({ therapist, sessions }:SessionsProps) {
     <Container>
       <Header>Therapist {therapist}</Header>
       <UL>
-        { sessions.map((session:string, index:number) => <LI key={index}>{session}</LI>) }
+        { sessions.map((session:TherapistItemProps, index:number) => {
+          return <LI key={index}>{session.time}</LI>
+        }) }
       </UL>
     </Container>
   );
